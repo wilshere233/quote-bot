@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
+# 本地个人配置（收件人邮箱），禁止提交
+mail_config.json
+
+# 运行时数据
+data/
+outbox/
+outbox.jsonl
+outbox_failed.jsonl
+*.log
+daemon.pid
+state_*.json

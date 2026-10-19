@@ -1,0 +1,31 @@
+{
+  "_说明": "QQ 官方机器人（长连接）凭证 —— 多机器人版。在「QQ 开放平台 bot.qq.com → 开发设置 → 开发信息」分别获取每个机器人的 appid 与 appsecret。AppSecret 只完整显示一次，丢了只能重置。把占位符替换成真实值后保存即可，无需改代码。",
+
+  "_多机器人用法": "bots 是一个字典：key = 机器人名，value = 该机器人的凭证与参数。每个机器人独立 appid/appsecret、独立长连接、独立出向配额、独立 openid 命名空间。新增机器人 = 加一个 key；下线机器人 = 删掉它的整个对象（都不用改代码）。⚠️ 改名会换掉整套数据文件后缀，必须同步迁移数据（旧名文件不迁移等于联系人全丢）。",
+
+  "_数据独立性": "不同机器人的数据完全分开存：联系人映射 contacts_<机器人名>.json、自动学习 contacts_learned_<机器人名>.json、限速计数 state_<机器人名>.json、发送队列 outbox/<机器人名>.jsonl、归档 data/messages_<机器人名>_<日期>.jsonl。原因是 QQ 的 openid 按机器人隔离——同一个人在两个机器人下是不同的 openid，混用会导致发错人。换机器人后该机器人的旧 openid 全部失效，须对方重新发消息学习。",
+
+  "_兼容性": "若本文件没有 bots 字段，则整个文件视为单个机器人，名字取顶层的 bot_name —— 旧版单机器人配置无需迁移也能继续用。",
+
+  "_重要前提": "同一机器人同时只能有一个长连接（新的会互踢旧的），但不同机器人各占一条、互不影响，放心同时挂多个。每个机器人需在开放平台单独勾选「事件订阅」，漏勾 = 连接正常但收不到事件。正式环境还需在控制台配置 IP 白名单。",
+
+  "bots": {
+    "机器人A": {
+      "appid": "在此填入你的 QQ 机器人 AppID",
+      "appsecret": "在此填入你的 QQ 机器人 AppSecret",
+      "app_token": "",
+      "sandbox": false,
+      "intents": [
+        "GUILDS",
+        "GROUP_AND_C2C_EVENT",
+        "INTERACTION",
+        "MESSAGE_AUDIT"
+      ],
+      "rate_per_min": 20,
+      "rate_per_day": 1000,
+      "auto_reply": true,
+      "auto_reply_skip": [],
+      "_备注": "auto_reply=true 开启四类话术自动应答；auto_reply_skip 填不应答的 openid/显示名（留空=全员应答）。sandbox=true 为沙箱环境（仅测试成员可用、不受频率限制）。"
+    }
+  }
+}
